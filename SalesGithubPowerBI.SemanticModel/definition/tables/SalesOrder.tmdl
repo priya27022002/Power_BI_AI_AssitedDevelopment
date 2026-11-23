@@ -1,0 +1,48 @@
+table SalesOrder
+	lineageTag: f974c041-a879-4be5-956e-23c22dc76eaa
+
+	column Channel
+		dataType: string
+		lineageTag: b7f719fe-46e7-4321-9050-00082cf0b1d5
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderLineKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 78aa3712-147c-449a-a5ef-5562c781e43c
+		summarizeBy: none
+		sourceColumn: SalesOrderLineKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Order'
+		dataType: string
+		lineageTag: 66fffa89-62dc-470c-94c7-f2cc44c30d8e
+		summarizeBy: none
+		sourceColumn: Sales Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Order Line'
+		dataType: string
+		lineageTag: b8452f8a-ff8c-4c62-87c3-5040f145b036
+		summarizeBy: none
+		sourceColumn: Sales Order Line
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SalesOrder = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rajapriyah.j\OneDrive - UB Technology Innovations, Inc\Power BI\Sample Datasets\AdventureWorks Sales.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "SalesOrder", Kind = "Table"]}[Data],
+				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 1", {{"Channel", type text}, {"SalesOrderLineKey", Int64.Type}, {"Sales Order", type text}, {"Sales Order Line", type text}}, "en-US")
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

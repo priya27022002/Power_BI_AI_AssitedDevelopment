@@ -1,0 +1,48 @@
+table SalesTerritory
+	lineageTag: e44f8eb2-8bb7-4323-94fa-c08c7f70c6b4
+
+	column SalesTerritoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fe2cbea-0d92-4261-9fcc-2ab295eec506
+		summarizeBy: none
+		sourceColumn: SalesTerritoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 3c635e29-0e07-47b7-bedd-997284dfbcef
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: d6bf18cc-5f6a-4768-b1e3-e80044bf940f
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 5fd1977b-0fdf-4ae5-935a-4147afcf58c4
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SalesTerritory = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rajapriyah.j\OneDrive - UB Technology Innovations, Inc\Power BI\Sample Datasets\AdventureWorks Sales.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "SalesTerritory", Kind = "Table"]}[Data],
+				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 1", {{"SalesTerritoryKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}}, "en-US")
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+
