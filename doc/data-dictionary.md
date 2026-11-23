@@ -6,26 +6,28 @@
 
 | Table name | Column / measure name | Data type | Business description |
 |---|---|---|---|
-| `Sales` | `Sales YTD` | DAX measure; format `$#,0.00` | Calculates year-to-date sales by filtering `Sales[OrderDateKey]` through date keys returned by `Date[Date]` and `Date[DateKey]`. |
+| `Sales` | `Sales YTD` | DAX measure; format `$#,0.00` | Calculates sales for the year-to-date date context using `DATESYTD('Date'[Date])`. |
 | `Sales` | `Sales Amount` | `double` | Sales amount value stored in the `Sales` table. |
-| `Sales` | `OrderDateKey` | `int64` | Date key used to relate sales records to dates in the `Date` table. |
+| `Sales` | `OrderDateKey` | `int64` | Date key used to connect sales records to `Date[DateKey]`. |
 | `Date` | `Date` | `dateTime` with underlying date data type | Date value used for the year-to-date date context. |
-| `Date` | `DateKey` | `int64` | Integer date key corresponding to dates used by the `Sales YTD` measure. |
+| `Date` | `DateKey` | `int64` | Integer date key used by the active relationship from `Sales[OrderDateKey]`. |
 
 ### Column Chart: Year-to-Date Sales by Product Category
 
 | Table name | Column / measure name | Data type | Business description |
 |---|---|---|---|
-| `Product` | `Category` | `string` | Product category used to break down year-to-date sales. |
-| `Sales` | `Sales YTD` | DAX measure; format `$#,0.00` | Sales total accumulated year to date, plotted as the Y-axis value for each product category. |
+| `Product` | `Category` | `string` | Product category used to group year-to-date sales. |
+| `Sales` | `Sales YTD` | DAX measure; format `$#,0.00` | Year-to-date sales plotted as the Y-axis value for each product category. |
 
-## Measure Dependencies
+## Relationship Dependency
 
-`Sales YTD` uses the following existing model objects:
+`Sales YTD` is evaluated in the active Date context created by:
 
-- `Sales[Sales Amount]`
-- `Sales[OrderDateKey]`
-- `Date[Date]`
-- `Date[DateKey]`
+- `Sales[OrderDateKey]` to `Date[DateKey]`
+- Cardinality: many-to-one
+- Filter direction: single-direction from `Date` to `Sales`
 
-The measure uses `Date[Date]` to establish the DATESYTD date context and `Date[DateKey]` with `TREATAS` to filter `Sales[OrderDateKey]`.
+The chart additionally depends on:
+
+- `Product[Category]`
+- `Sales[ProductKey]` to `Product[ProductKey]`
