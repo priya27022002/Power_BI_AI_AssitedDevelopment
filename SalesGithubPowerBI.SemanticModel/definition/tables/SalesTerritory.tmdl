@@ -40,7 +40,8 @@ table SalesTerritory
 				let
 				  Source = Excel.Workbook(File.Contents("C:\Users\rajapriyah.j\OneDrive - UB Technology Innovations, Inc\Power BI\Sample Datasets\AdventureWorks Sales.xlsx"), null, true),
 				  #"Navigation 1" = Source{[Item = "SalesTerritory", Kind = "Table"]}[Data],
-				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 1", {{"SalesTerritoryKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}}, "en-US")
+				  #"Trimmed and cleaned text" = Table.TransformColumns(#"Navigation 1", {{"Region", each Text.Clean(Text.Trim(_)), type text}, {"Country", each Text.Clean(Text.Trim(_)), type text}, {"Group", each Text.Clean(Text.Trim(_)), type text}}),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Trimmed and cleaned text", {{"SalesTerritoryKey", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}}, "en-US")
 				in
 				  #"Changed column type"
 

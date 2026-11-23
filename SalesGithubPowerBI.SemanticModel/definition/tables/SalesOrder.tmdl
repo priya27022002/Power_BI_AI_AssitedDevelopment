@@ -40,7 +40,8 @@ table SalesOrder
 				let
 				  Source = Excel.Workbook(File.Contents("C:\Users\rajapriyah.j\OneDrive - UB Technology Innovations, Inc\Power BI\Sample Datasets\AdventureWorks Sales.xlsx"), null, true),
 				  #"Navigation 1" = Source{[Item = "SalesOrder", Kind = "Table"]}[Data],
-				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 1", {{"Channel", type text}, {"SalesOrderLineKey", Int64.Type}, {"Sales Order", type text}, {"Sales Order Line", type text}}, "en-US")
+				  #"Trimmed and cleaned text" = Table.TransformColumns(#"Navigation 1", {{"Channel", each Text.Clean(Text.Trim(_)), type text}, {"Sales Order", each Text.Clean(Text.Trim(_)), type text}, {"Sales Order Line", each Text.Clean(Text.Trim(_)), type text}}),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Trimmed and cleaned text", {{"Channel", type text}, {"SalesOrderLineKey", Int64.Type}, {"Sales Order", type text}, {"Sales Order Line", type text}}, "en-US")
 				in
 				  #"Changed column type"
 
