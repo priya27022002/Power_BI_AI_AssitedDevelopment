@@ -1,18 +1,35 @@
-relationship AutoDetected_dfd5694f-3457-4cdb-a46c-9b0106248bc1
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
+relationship Sales_to_SalesOrder
+	fromCardinality: many
+	toCardinality: one
+	crossFilteringBehavior: oneDirection
 	fromColumn: Sales.SalesOrderLineKey
 	toColumn: SalesOrder.SalesOrderLineKey
 
-relationship AutoDetected_b81f4371-4a69-4b43-a396-5c65aa713761
+relationship Sales_to_SalesTerritory
+	fromCardinality: many
+	toCardinality: one
+	crossFilteringBehavior: oneDirection
 	fromColumn: Sales.SalesTerritoryKey
 	toColumn: SalesTerritory.SalesTerritoryKey
 
-relationship AutoDetected_404b8919-6567-4266-9d8b-293cb9f53db3
+relationship Sales_to_Customer
+	fromCardinality: many
+	toCardinality: one
+	crossFilteringBehavior: oneDirection
 	fromColumn: Sales.CustomerKey
 	toColumn: Customer.CustomerKey
 
-relationship AutoDetected_a0a8d9de-a965-40f3-9274-e20fdadd7249
+relationship Sales_to_Product
+	fromCardinality: many
+	toCardinality: one
+	crossFilteringBehavior: oneDirection
 	fromColumn: Sales.ProductKey
 	toColumn: Product.ProductKey
+
+relationship Sales_to_Date_OrderDate
+	fromCardinality: many
+	toCardinality: one
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.OrderDateKey
+	toColumn: Date.DateKey
 

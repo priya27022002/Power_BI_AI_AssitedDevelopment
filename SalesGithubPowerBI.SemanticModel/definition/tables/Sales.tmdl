@@ -153,48 +153,33 @@ table Sales
 
 	annotation PBI_ResultType = Table
 
-measure 'Sales MTD' =
-			var _DateKeys = CALCULATETABLE(
-				VALUES('Date'[DateKey]),
+	measure 'Sales MTD' =
+			CALCULATE(
+				SUM('Sales'[Sales Amount]),
 				DATESMTD('Date'[Date])
 			)
-			return
-				CALCULATE(
-					SUM('Sales'[Sales Amount]),
-					TREATAS(_DateKeys, 'Sales'[OrderDateKey])
-				)
 		formatString: $#,0.00
 
 	measure 'Sales YTD' =
-			var _DateKeys = CALCULATETABLE(
-				VALUES('Date'[DateKey]),
+			CALCULATE(
+				SUM('Sales'[Sales Amount]),
 				DATESYTD('Date'[Date])
 			)
-			return
-				CALCULATE(
-					SUM('Sales'[Sales Amount]),
-					TREATAS(_DateKeys, 'Sales'[OrderDateKey])
-				)
 		formatString: $#,0.00
 
 	measure 'Sales Month-over-Month Change' =
-			var _CurrentMonthKeys = CALCULATETABLE(
-				VALUES('Date'[DateKey]),
+			VAR _CurrentMonthSales = CALCULATE(
+				SUM('Sales'[Sales Amount]),
 				DATESMTD('Date'[Date])
 			)
-			var _PreviousMonthKeys = CALCULATETABLE(
-				VALUES('Date'[DateKey]),
+			VAR _PreviousMonthSales = CALCULATE(
+				SUM('Sales'[Sales Amount]),
 				DATEADD('Date'[Date], -1, MONTH)
 			)
-			var _CurrentMonthSales = CALCULATE(
-				SUM('Sales'[Sales Amount]),
-				TREATAS(_CurrentMonthKeys, 'Sales'[OrderDateKey])
-			)
-			var _PreviousMonthSales = CALCULATE(
-				SUM('Sales'[Sales Amount]),
-				TREATAS(_PreviousMonthKeys, 'Sales'[OrderDateKey])
-			)
-			return
-				DIVIDE(_CurrentMonthSales - _PreviousMonthSales, _PreviousMonthSales)
+			RETURN
+				DIVIDE(
+					_CurrentMonthSales - _PreviousMonthSales,
+					_PreviousMonthSales
+				)
 		formatString: 0.0%;-0.0%;0.0%
 
